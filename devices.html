@@ -86,6 +86,21 @@
         function removeDevice(button) {
             button.parentElement.parentElement.remove();
         }
+        function searchDevicesWiFi() {
+            alert("Searching for devices via WiFi...");
+            // Simulating WiFi device discovery (replace this with actual network scanning logic)
+            setTimeout(() => {
+                let discoveredDevices = [
+                    { name: "ESP32 Sensor", type: "Temperature Sensor", status: "Active" },
+                    { name: "Arduino Board", type: "Microcontroller", status: "Inactive" }
+                ];
+                let tableBody = document.getElementById("deviceTableBody");
+                discoveredDevices.forEach(device => {
+                    let newRow = `<tr><td>${device.name}</td><td>${device.type}</td><td>${device.status}</td><td><button class='btn btn-danger' onclick='removeDevice(this)'>Remove</button></td></tr>`;
+                    tableBody.innerHTML += newRow;
+                });
+            }, 2000);
+        }
     </script>
 </body>
 </html>
