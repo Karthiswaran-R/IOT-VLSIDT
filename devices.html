@@ -11,9 +11,11 @@
         .dashboard-card { margin: 20px; }
         .sidebar { height: 100vh; background: #343a40; color: white; padding: 15px; position: fixed; }
         .main-content { margin-left: 200px; padding: 20px; }
+        .theme-dark { background-color: #343a40; color: white; }
+        .theme-light { background-color: #ffffff; color: black; }
     </style>
 </head>
-<body>
+<body class="theme-light">
     <div class="d-flex">
         <div class="sidebar">
             <h4>Dashboard Menu</h4>
@@ -31,40 +33,59 @@
                 </div>
             </nav>
             <div class="container mt-4">
-                <h3>List of Devices</h3>
-                <table class="table table-striped">
+                <h3>Devices</h3>
+                <button class="btn btn-primary mb-3" onclick="showAddDeviceModal()">Add Device</button>
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Device Name</th>
+                            <th>Device Type</th>
                             <th>Status</th>
-                            <th>IP Address</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Arduino</td>
-                            <td><span id="arduino-status">Loading...</span></td>
-                            <td><span id="arduino-ip">192.168.1.10</span></td>
-                            <td><button class="btn btn-primary">View</button></td>
-                        </tr>
-                        <tr>
-                            <td>ESP32</td>
-                            <td><span id="esp32-status">Loading...</span></td>
-                            <td><span id="esp32-ip">192.168.1.11</span></td>
-                            <td><button class="btn btn-primary">View</button></td>
-                        </tr>
+                    <tbody id="deviceTableBody">
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <div class="modal" id="addDeviceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Device</h5>
+                    <button type="button" class="btn-close" onclick="closeAddDeviceModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="deviceName" class="form-control mb-2" placeholder="Device Name">
+                    <input type="text" id="deviceType" class="form-control mb-2" placeholder="Device Type">
+                    <button class="btn btn-success" onclick="addDevice()">Save Device</button>
+                </div>
+            </div>
+        </div>
+    </div> 
     <script>
-        function updateDeviceStatus() {
-            document.getElementById("arduino-status").textContent = "Online";
-            document.getElementById("esp32-status").textContent = "Online";
+        function showAddDeviceModal() {
+            document.getElementById("addDeviceModal").style.display = "block";
         }
-        setInterval(updateDeviceStatus, 3000);
+        
+        function closeAddDeviceModal() {
+            document.getElementById("addDeviceModal").style.display = "none";
+        }
+        function addDevice() {
+            let name = document.getElementById("deviceName").value;
+            let type = document.getElementById("deviceType").value;
+            if (name && type) {
+                let tableBody = document.getElementById("deviceTableBody");
+                let newRow = `<tr><td>${name}</td><td>${type}</td><td>Active</td><td><button class='btn btn-danger' onclick='removeDevice(this)'>Remove</button></td></tr>`;
+                tableBody.innerHTML += newRow;
+                closeAddDeviceModal();
+            }
+        }
+        function removeDevice(button) {
+            button.parentElement.parentElement.remove();
+        }
     </script>
 </body>
 </html>
